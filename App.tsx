@@ -180,9 +180,19 @@ function StudioContent() {
           <View style={styles.card}>
             <View style={styles.inputHeaderRow}>
               <Text style={styles.cardTitle}>Your Text</Text>
-              <TouchableOpacity onPress={handleApplyRandomQuote} style={styles.sampleQuoteBtn}>
-                <Text style={styles.sampleQuoteText}>✨ Random Quote</Text>
-              </TouchableOpacity>
+              <View style={styles.inputHeaderActions}>
+                {Boolean(config.text) && (
+                  <TouchableOpacity
+                    onPress={() => updateConfig('text', '')}
+                    style={styles.clearTextBtn}
+                  >
+                    <Text style={styles.clearTextBtnText}>✕ Clear</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity onPress={handleApplyRandomQuote} style={styles.sampleQuoteBtn}>
+                  <Text style={styles.sampleQuoteText}>✨ Random Quote</Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <TextInput
               style={styles.textInput}
@@ -448,6 +458,24 @@ const styles = StyleSheet.create({
   cardTitle: {
     color: '#F8FAFC',
     fontSize: 15,
+    fontWeight: '600',
+  },
+  inputHeaderActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  clearTextBtn: {
+    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
+  },
+  clearTextBtnText: {
+    color: '#F87171',
+    fontSize: 12,
     fontWeight: '600',
   },
   sampleQuoteBtn: {
