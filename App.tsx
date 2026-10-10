@@ -191,10 +191,10 @@ function StudioContent() {
               placeholder="Enter your text here..."
               placeholderTextColor="#64748B"
               multiline
-              numberOfLines={3}
-              maxLength={200}
+              numberOfLines={4}
+              maxLength={1000}
             />
-            <Text style={styles.charCount}>{config.text.length} / 200 characters</Text>
+            <Text style={styles.charCount}>{config.text.length} / 1000 characters</Text>
 
             {/* Author / Signature Section */}
             <View style={styles.authorSection}>
@@ -467,7 +467,8 @@ const styles = StyleSheet.create({
     padding: 12,
     color: '#F8FAFC',
     fontSize: 15,
-    minHeight: 80,
+    minHeight: 110,
+    maxHeight: 200,
     textAlignVertical: 'top',
     borderWidth: 1,
     borderColor: '#334155',

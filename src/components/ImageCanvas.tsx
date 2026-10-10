@@ -61,19 +61,31 @@ export const ImageCanvas = forwardRef<any, ImageCanvasProps>(({ config, previewW
     canvasHeight = (canvasWidth * 9) / 16;
   }
 
-  // Estimate max characters per line based on canvas width and font size
-  const maxChars = Math.max(10, Math.floor((canvasWidth - 48) / (config.fontSize * 0.58)));
-  const lines = wrapText(config.text || 'Your Text Here', maxChars);
-
-  const lineHeight = config.fontSize * 1.35;
-  const totalQuoteHeight = lines.length * lineHeight;
+  // Dynamically calculate font size to comfortably fit text up to 1000 characters
+  let fontSize = config.fontSize;
+  let maxChars = Math.max(12, Math.floor((canvasWidth - 48) / (fontSize * 0.58)));
+  let lines = wrapText(config.text || 'Your Text Here', maxChars);
+  let lineHeight = fontSize * 1.35;
+  let totalQuoteHeight = lines.length * lineHeight;
 
   const hasAuthor = Boolean(config.author && config.author.trim());
-  const authorFontSize = Math.max(13, Math.round(config.fontSize * 0.48));
-  const authorSpacing = hasAuthor ? authorFontSize * 2.5 : 0;
+  let authorFontSize = Math.max(12, Math.round(fontSize * 0.48));
+  let authorSpacing = hasAuthor ? authorFontSize * 2.5 : 0;
+  const maxAllowedHeight = canvasHeight - 56;
+
+  // Auto-scale font size if lines exceed canvas bounds (vital for long texts up to 1000 chars)
+  while (totalQuoteHeight + authorSpacing > maxAllowedHeight && fontSize > 10) {
+    fontSize -= 1;
+    maxChars = Math.max(12, Math.floor((canvasWidth - 48) / (fontSize * 0.58)));
+    lines = wrapText(config.text || 'Your Text Here', maxChars);
+    lineHeight = fontSize * 1.35;
+    totalQuoteHeight = lines.length * lineHeight;
+    authorFontSize = Math.max(10, Math.round(fontSize * 0.48));
+    authorSpacing = hasAuthor ? authorFontSize * 2.5 : 0;
+  }
 
   const totalContentHeight = totalQuoteHeight + authorSpacing;
-  const startY = (canvasHeight - totalContentHeight) / 2 + config.fontSize * 0.85;
+  const startY = (canvasHeight - totalContentHeight) / 2 + fontSize * 0.85;
   const authorY = startY + (lines.length - 1) * lineHeight + authorSpacing;
   const dividerY = authorY - authorFontSize * 1.4;
 
@@ -238,7 +250,7 @@ export const ImageCanvas = forwardRef<any, ImageCanvasProps>(({ config, previewW
                 strokeLinejoin="round"
                 strokeLinecap="round"
                 fill={config.strokeColor}
-                fontSize={config.fontSize}
+                fontSize={fontSize}
                 fontWeight={config.fontWeight}
                 fontFamily={config.fontFamily}
                 fontStyle={config.isItalic ? 'italic' : 'normal'}
@@ -255,7 +267,7 @@ export const ImageCanvas = forwardRef<any, ImageCanvasProps>(({ config, previewW
               x={anchorX}
               y={startY + idx * lineHeight}
               fill={config.textColor}
-              fontSize={config.fontSize}
+              fontSize={fontSize}
               fontWeight={config.fontWeight}
               fontFamily={config.fontFamily}
               fontStyle={config.isItalic ? 'italic' : 'normal'}
