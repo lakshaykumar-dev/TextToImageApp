@@ -149,7 +149,7 @@ function StudioContent() {
 
   return (
     <View style={[styles.safeArea, { paddingTop: topInset, paddingBottom: insets.bottom }]}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -163,17 +163,19 @@ function StudioContent() {
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Text to Image Studio</Text>
             <Text style={styles.headerSubtitle}>
-              Customize fonts, colors, strokes & share anywhere
+              Bespoke typography, strokes & high-res export
             </Text>
           </View>
 
-          {/* Canvas Live Preview */}
+          {/* Canvas Live Preview Card */}
           <View style={styles.canvasSection}>
             <View style={styles.previewHeader}>
               <Text style={styles.previewLabel}>LIVE PREVIEW</Text>
               <Text style={styles.ratioBadge}>{config.aspectRatio}</Text>
             </View>
-            <ImageCanvas ref={canvasRef} config={config} />
+            <View style={styles.canvasCard}>
+              <ImageCanvas ref={canvasRef} config={config} />
+            </View>
           </View>
 
           {/* Text Input Section */}
@@ -185,12 +187,17 @@ function StudioContent() {
                   <TouchableOpacity
                     onPress={() => updateConfig('text', '')}
                     style={styles.clearTextBtn}
+                    activeOpacity={0.7}
                   >
                     <Text style={styles.clearTextBtnText}>✕ Clear</Text>
                   </TouchableOpacity>
                 )}
-                <TouchableOpacity onPress={handleApplyRandomQuote} style={styles.sampleQuoteBtn}>
-                  <Text style={styles.sampleQuoteText}>✨ Random Quote</Text>
+                <TouchableOpacity
+                  onPress={handleApplyRandomQuote}
+                  style={styles.sampleQuoteBtn}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.sampleQuoteText}>✨ Random</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -198,20 +205,23 @@ function StudioContent() {
               style={styles.textInput}
               value={config.text}
               onChangeText={(text) => updateConfig('text', text)}
-              placeholder="Enter your text here..."
-              placeholderTextColor="#64748B"
+              placeholder="Enter your thoughts or quote..."
+              placeholderTextColor="#A1A1AA"
               multiline
               numberOfLines={4}
               maxLength={1000}
             />
-            <Text style={styles.charCount}>{config.text.length} / 1000 characters</Text>
+            <Text style={styles.charCount}>{config.text.length} / 1000</Text>
 
             {/* Author / Signature Section */}
             <View style={styles.authorSection}>
               <View style={styles.authorHeaderRow}>
-                <Text style={styles.authorLabel}>Author / Signature (Optional)</Text>
+                <Text style={styles.authorLabel}>Author / Signature</Text>
                 {Boolean(config.author) && (
-                  <TouchableOpacity onPress={() => updateConfig('author', '')}>
+                  <TouchableOpacity
+                    onPress={() => updateConfig('author', '')}
+                    activeOpacity={0.7}
+                  >
                     <Text style={styles.clearAuthorText}>✕ Clear</Text>
                   </TouchableOpacity>
                 )}
@@ -221,19 +231,19 @@ function StudioContent() {
                 value={config.author}
                 onChangeText={(author) => updateConfig('author', author)}
                 placeholder="e.g. Albert Einstein or @yourhandle"
-                placeholderTextColor="#64748B"
+                placeholderTextColor="#A1A1AA"
                 maxLength={40}
               />
 
               {/* Author Style Options */}
               {Boolean(config.author) && (
                 <View style={styles.authorStyleRow}>
-                  <Text style={styles.authorStyleLabel}>Display Style:</Text>
+                  <Text style={styles.authorStyleLabel}>Style:</Text>
                   {(
                     [
-                      { id: 'classic', label: '— Line Accent' },
-                      { id: 'badge', label: '🏷️ Badge Pill' },
-                      { id: 'minimal', label: 'Minimalist' },
+                      { id: 'classic', label: '— Line' },
+                      { id: 'badge', label: '🏷️ Badge' },
+                      { id: 'minimal', label: 'Minimal' },
                     ] as const
                   ).map((item) => (
                     <TouchableOpacity
@@ -243,6 +253,7 @@ function StudioContent() {
                         styles.authorStyleChip,
                         config.authorStyle === item.id && styles.activeAuthorStyleChip,
                       ]}
+                      activeOpacity={0.7}
                     >
                       <Text
                         style={[
@@ -264,27 +275,30 @@ function StudioContent() {
             <TouchableOpacity
               onPress={() => setActiveTab('style')}
               style={[styles.tabButton, activeTab === 'style' && styles.activeTabButton]}
+              activeOpacity={0.7}
             >
               <Text style={[styles.tabText, activeTab === 'style' && styles.activeTabText]}>
-                🔤 Font & Text
+                🔤 Typography
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => setActiveTab('stroke')}
               style={[styles.tabButton, activeTab === 'stroke' && styles.activeTabButton]}
+              activeOpacity={0.7}
             >
               <Text style={[styles.tabText, activeTab === 'stroke' && styles.activeTabText]}>
-                🖋️ Font Stroke
+                🖋️ Stroke
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => setActiveTab('bg')}
               style={[styles.tabButton, activeTab === 'bg' && styles.activeTabButton]}
+              activeOpacity={0.7}
             >
               <Text style={[styles.tabText, activeTab === 'bg' && styles.activeTabText]}>
-                🎨 Background
+                🎨 Wallpaper
               </Text>
             </TouchableOpacity>
           </View>
@@ -339,7 +353,7 @@ function StudioContent() {
               />
 
               <ColorPickerRow
-                label="Fallback / Solid Background Color"
+                label="Solid Canvas Background"
                 selectedColor={config.backgroundColor}
                 onSelectColor={(c) => updateConfig('backgroundColor', c)}
                 palette={COLOR_PALETTE}
@@ -348,7 +362,7 @@ function StudioContent() {
           )}
 
           {/* Bottom Spacing */}
-          <View style={{ height: 100 }} />
+          <View style={{ height: 110 }} />
         </ScrollView>
 
         {/* Sticky Action Footer */}
@@ -357,9 +371,10 @@ function StudioContent() {
             onPress={handleGenerateImage}
             disabled={isGenerating}
             style={[styles.generateBtn, isGenerating && styles.disabledBtn]}
+            activeOpacity={0.85}
           >
             {isGenerating ? (
-              <ActivityIndicator color="#FFFFFF" />
+              <ActivityIndicator color="#FFFFFF" size="small" />
             ) : (
               <Text style={styles.generateBtnText}>⚡ Generate Image</Text>
             )}
@@ -369,6 +384,7 @@ function StudioContent() {
             onPress={handleQuickShare}
             disabled={isGenerating}
             style={[styles.quickShareBtn, isGenerating && styles.disabledBtn]}
+            activeOpacity={0.85}
           >
             <Text style={styles.quickShareText}>📤 Share</Text>
           </TouchableOpacity>
@@ -389,7 +405,7 @@ function StudioContent() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
   },
   container: {
     flex: 1,
@@ -401,20 +417,22 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
+    marginTop: 6,
     marginBottom: 16,
     alignItems: 'center',
   },
   headerTitle: {
-    color: '#F8FAFC',
-    fontSize: 22,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+    color: '#18181B',
+    fontSize: 24,
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    letterSpacing: -0.3,
   },
   headerSubtitle: {
-    color: '#94A3B8',
-    fontSize: 13,
-    marginTop: 4,
-    textAlign: 'center',
+    color: '#71717A',
+    fontSize: 12,
+    marginTop: 3,
+    letterSpacing: 0.2,
   },
   canvasSection: {
     marginBottom: 18,
@@ -424,41 +442,61 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     marginBottom: 8,
     alignItems: 'center',
   },
   previewLabel: {
-    color: '#64748B',
+    color: '#71717A',
     fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 1,
+    letterSpacing: 1.2,
   },
   ratioBadge: {
-    backgroundColor: '#1E293B',
-    color: '#94A3B8',
+    backgroundColor: '#E4E4E7',
+    color: '#3F3F46',
     fontSize: 11,
     fontWeight: '600',
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: 12,
+  },
+  canvasCard: {
+    borderRadius: 18,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E4E4E7',
+    elevation: 3,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
   },
   card: {
-    backgroundColor: '#1E293B',
-    borderRadius: 14,
-    padding: 14,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
     marginBottom: 14,
+    borderWidth: 1,
+    borderColor: '#E4E4E7',
+    elevation: 1,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
   },
   inputHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   cardTitle: {
-    color: '#F8FAFC',
+    color: '#18181B',
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: -0.2,
   },
   inputHeaderActions: {
     flexDirection: 'row',
@@ -466,52 +504,54 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   clearTextBtn: {
-    backgroundColor: 'rgba(239, 68, 68, 0.15)',
-    paddingHorizontal: 9,
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
+    borderColor: 'rgba(239, 68, 68, 0.2)',
   },
   clearTextBtnText: {
-    color: '#F87171',
-    fontSize: 12,
+    color: '#DC2626',
+    fontSize: 11,
     fontWeight: '600',
   },
   sampleQuoteBtn: {
-    backgroundColor: '#334155',
+    backgroundColor: '#F4F4F5',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#E4E4E7',
   },
   sampleQuoteText: {
-    color: '#93C5FD',
-    fontSize: 12,
+    color: '#3F3F46',
+    fontSize: 11,
     fontWeight: '600',
   },
   textInput: {
-    backgroundColor: '#0F172A',
-    borderRadius: 10,
+    backgroundColor: '#FAFAFA',
+    borderRadius: 12,
     padding: 12,
-    color: '#F8FAFC',
-    fontSize: 15,
-    minHeight: 110,
-    maxHeight: 200,
+    color: '#18181B',
+    fontSize: 14,
+    minHeight: 100,
+    maxHeight: 180,
     textAlignVertical: 'top',
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#E4E4E7',
   },
   charCount: {
-    color: '#64748B',
+    color: '#A1A1AA',
     fontSize: 11,
     textAlign: 'right',
     marginTop: 6,
   },
   authorSection: {
-    marginTop: 12,
+    marginTop: 14,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#334155',
+    borderTopColor: '#F4F4F5',
   },
   authorHeaderRow: {
     flexDirection: 'row',
@@ -520,24 +560,24 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   authorLabel: {
-    color: '#94A3B8',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  clearAuthorText: {
-    color: '#EF4444',
+    color: '#3F3F46',
     fontSize: 12,
     fontWeight: '600',
   },
+  clearAuthorText: {
+    color: '#DC2626',
+    fontSize: 11,
+    fontWeight: '600',
+  },
   authorInput: {
-    backgroundColor: '#0F172A',
-    borderRadius: 8,
+    backgroundColor: '#FAFAFA',
+    borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    color: '#F8FAFC',
-    fontSize: 14,
+    color: '#18181B',
+    fontSize: 13,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#E4E4E7',
   },
   authorStyleRow: {
     flexDirection: 'row',
@@ -547,24 +587,24 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   authorStyleLabel: {
-    color: '#64748B',
-    fontSize: 12,
+    color: '#71717A',
+    fontSize: 11,
     marginRight: 4,
   },
   authorStyleChip: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F4F4F5',
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
+    paddingVertical: 4,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#E4E4E7',
   },
   activeAuthorStyleChip: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#60A5FA',
+    backgroundColor: '#18181B',
+    borderColor: '#18181B',
   },
   authorStyleChipText: {
-    color: '#94A3B8',
+    color: '#71717A',
     fontSize: 11,
     fontWeight: '600',
   },
@@ -574,27 +614,34 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#0F172A',
-    borderRadius: 12,
+    backgroundColor: '#F4F4F5',
+    borderRadius: 14,
     padding: 4,
-    marginBottom: 10,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E4E4E7',
   },
   tabButton: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 8,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 10,
   },
   activeTabButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#FFFFFF',
+    elevation: 2,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
   },
   tabText: {
-    color: '#94A3B8',
+    color: '#71717A',
     fontSize: 12,
     fontWeight: '600',
   },
   activeTabText: {
-    color: '#FFFFFF',
+    color: '#18181B',
     fontWeight: '700',
   },
   footer: {
@@ -602,51 +649,50 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     paddingVertical: 12,
     flexDirection: 'row',
     gap: 10,
     borderTopWidth: 1,
-    borderTopColor: '#1E293B',
+    borderTopColor: '#E4E4E7',
+    elevation: 8,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
   },
   generateBtn: {
     flex: 2,
-    backgroundColor: '#3B82F6',
-    paddingVertical: 14,
-    borderRadius: 12,
+    backgroundColor: '#18181B',
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#3B82F6',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 6,
+    elevation: 2,
   },
   quickShareBtn: {
     flex: 1,
-    backgroundColor: '#10B981',
-    paddingVertical: 14,
-    borderRadius: 12,
+    backgroundColor: '#F4F4F5',
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#10B981',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 6,
+    borderWidth: 1,
+    borderColor: '#E4E4E7',
   },
   disabledBtn: {
-    opacity: 0.6,
+    opacity: 0.5,
   },
   generateBtnText: {
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  quickShareText: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  quickShareText: {
+    color: '#18181B',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

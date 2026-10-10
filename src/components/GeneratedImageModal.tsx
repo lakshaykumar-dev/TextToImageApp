@@ -35,16 +35,14 @@ export const GeneratedImageModal: React.FC<GeneratedImageModalProps> = ({
 
     setSharing(true);
     try {
-      // First attempt using react-native-share for rich file sharing
       await Share.open({
         title: 'Share Generated Image',
-        message: textMessage ? `"${textMessage}"` : 'Generated with TextToImageApp',
+        message: textMessage ? `"${textMessage}"` : 'Generated with TextToImage Studio',
         url: imageUri,
         type: 'image/png',
         failOnCancel: false,
       });
     } catch (error: any) {
-      // Fallback to React Native core Share API
       try {
         await RNShare.share({
           message: `${textMessage ? `"${textMessage}"\n` : ''}${imageUri}`,
@@ -52,7 +50,7 @@ export const GeneratedImageModal: React.FC<GeneratedImageModalProps> = ({
         });
       } catch (fallbackError: any) {
         if (error?.message !== 'User did not share') {
-          Alert.alert('Sharing Notice', error?.message || 'Unable to open share dialog');
+          Alert.alert('Notice', error?.message || 'Unable to open share dialog');
         }
       }
     } finally {
@@ -64,15 +62,15 @@ export const GeneratedImageModal: React.FC<GeneratedImageModalProps> = ({
     <Modal
       visible={visible}
       transparent
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           <View style={styles.header}>
             <View>
-              <Text style={styles.title}>Image Generated!</Text>
-              <Text style={styles.subtitle}>Ready to share or save</Text>
+              <Text style={styles.title}>Artwork Generated</Text>
+              <Text style={styles.subtitle}>Ready to share or save to camera roll</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
               <Text style={styles.closeBtnText}>✕</Text>
@@ -88,7 +86,7 @@ export const GeneratedImageModal: React.FC<GeneratedImageModalProps> = ({
                 resizeMode="contain"
               />
             ) : (
-              <ActivityIndicator size="large" color="#3B82F6" />
+              <ActivityIndicator size="large" color="#18181B" />
             )}
           </View>
 
@@ -98,16 +96,17 @@ export const GeneratedImageModal: React.FC<GeneratedImageModalProps> = ({
               onPress={handleShare}
               disabled={sharing || !imageUri}
               style={[styles.shareBtn, (!imageUri || sharing) && styles.disabledBtn]}
+              activeOpacity={0.85}
             >
               {sharing ? (
                 <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
-                <Text style={styles.shareBtnText}>📤 Share Image</Text>
+                <Text style={styles.shareBtnText}>📤 Share Artwork</Text>
               )}
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={onClose} style={styles.doneBtn}>
-              <Text style={styles.doneBtnText}>Close / Edit More</Text>
+            <TouchableOpacity onPress={onClose} style={styles.doneBtn} activeOpacity={0.8}>
+              <Text style={styles.doneBtnText}>Continue Editing</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -119,23 +118,21 @@ export const GeneratedImageModal: React.FC<GeneratedImageModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   modalContent: {
     width: '100%',
-    maxHeight: '90%',
-    backgroundColor: '#0F172A',
-    borderRadius: 20,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#334155',
+    maxHeight: '92%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    padding: 22,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
     elevation: 20,
   },
   header: {
@@ -145,55 +142,57 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    color: '#F8FAFC',
-    fontSize: 18,
+    color: '#18181B',
+    fontSize: 20,
+    fontFamily: 'serif',
     fontWeight: '700',
+    letterSpacing: -0.3,
   },
   subtitle: {
-    color: '#94A3B8',
-    fontSize: 12,
+    color: '#71717A',
+    fontSize: 13,
     marginTop: 2,
   },
   closeBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#F4F4F5',
     justifyContent: 'center',
     alignItems: 'center',
   },
   closeBtnText: {
-    color: '#CBD5E1',
-    fontSize: 16,
+    color: '#71717A',
+    fontSize: 14,
     fontWeight: 'bold',
   },
   imageContainer: {
     width: '100%',
     height: 320,
-    backgroundColor: '#020617',
-    borderRadius: 14,
+    backgroundColor: '#F4F4F5',
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E4E4E7',
   },
   imagePreview: {
     width: '100%',
     height: '100%',
   },
   actionContainer: {
-    marginTop: 20,
+    marginTop: 18,
     gap: 10,
   },
   shareBtn: {
-    backgroundColor: '#3B82F6',
-    paddingVertical: 14,
-    borderRadius: 12,
+    backgroundColor: '#18181B',
+    paddingVertical: 15,
+    borderRadius: 24,
     alignItems: 'center',
-    shadowColor: '#3B82F6',
+    shadowColor: '#18181B',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
   },
@@ -202,17 +201,18 @@ const styles = StyleSheet.create({
   },
   shareBtnText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
+    letterSpacing: 0.2,
   },
   doneBtn: {
-    backgroundColor: '#1E293B',
-    paddingVertical: 12,
-    borderRadius: 12,
+    backgroundColor: '#F4F4F5',
+    paddingVertical: 13,
+    borderRadius: 24,
     alignItems: 'center',
   },
   doneBtnText: {
-    color: '#94A3B8',
+    color: '#71717A',
     fontSize: 14,
     fontWeight: '600',
   },

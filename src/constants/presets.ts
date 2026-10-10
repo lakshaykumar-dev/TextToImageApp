@@ -1,54 +1,44 @@
 import { FontFamilyType } from '../types';
 
 export const COLOR_PALETTE = [
-  '#000000', // Black
-  '#FFFFFF', // White
-  '#6366F1', // Indigo
-  '#EC4899', // Pink
-  '#EF4444', // Red
-  '#F59E0B', // Amber
-  '#10B981', // Emerald
-  '#06B6D4', // Cyan
-  '#3B82F6', // Blue
-  '#8B5CF6', // Purple
-  '#14B8A6', // Teal
-  '#F97316', // Orange
-  '#1E293B', // Slate Dark
-  '#0F172A', // Midnight
+  '#18181B', // Onyx Dark
+  '#2563EB', // Royal Blue
+  '#EF4444', // Crimson Coral
+  '#059669', // Emerald
+  '#D97706', // Honey Amber
   '#7C3AED', // Violet
+  '#0F172A', // Midnight Navy
   '#E11D48', // Rose
-  '#FBBF24', // Yellow
-  '#84CC16', // Lime
+  '#FFFFFF', // Pure White
+  '#475569', // Slate
 ];
 
 export const STROKE_COLORS = [
-  '#000000',
-  '#FFFFFF',
-  '#FBBF24',
-  '#EF4444',
-  '#3B82F6',
-  '#10B981',
-  '#EC4899',
-  '#8B5CF6',
-  '#F97316',
-  '#06B6D4',
+  '#18181B', // Onyx Dark
+  '#FFFFFF', // Pure White
+  '#2563EB', // Royal Blue
+  '#D97706', // Amber Gold
+  '#EF4444', // Red
+  '#059669', // Emerald
+  '#7C3AED', // Purple
+  '#06B6D4', // Cyan
 ];
 
 export const FONT_OPTIONS: { label: string; value: FontFamilyType }[] = [
-  { label: 'Default (Sans)', value: 'sans-serif' },
-  { label: 'Serif (Classic)', value: 'serif' },
-  { label: 'Monospace (Code)', value: 'monospace' },
-  { label: 'Condensed (Tall)', value: 'sans-serif-condensed' },
-  { label: 'Medium (Modern)', value: 'sans-serif-medium' },
+  { label: 'Serif (Editorial)', value: 'serif' },
+  { label: 'Sans (Modern)', value: 'sans-serif' },
+  { label: 'Mono (Minimal)', value: 'monospace' },
+  { label: 'Condensed', value: 'sans-serif-condensed' },
+  { label: 'Medium', value: 'sans-serif-medium' },
 ];
 
 export const SAMPLE_QUOTES = [
   { text: 'Creativity is intelligence having fun.', author: 'Albert Einstein' },
-  { text: 'Stay hungry, stay foolish.', author: 'Steve Jobs' },
+  { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
+  { text: 'Design is intelligence made visible.', author: 'Alina Wheeler' },
   { text: 'Turn your wounds into wisdom.', author: 'Oprah Winfrey' },
-  { text: 'Be the change you wish to see in the world.', author: 'Mahatma Gandhi' },
   { text: 'Make each day your masterpiece.', author: 'John Wooden' },
-  { text: 'It always seems impossible until it is done.', author: 'Nelson Mandela' },
+  { text: 'Stay hungry, stay foolish.', author: 'Steve Jobs' },
 ];
 
 export const PRESET_BACKGROUND_IMAGES = [

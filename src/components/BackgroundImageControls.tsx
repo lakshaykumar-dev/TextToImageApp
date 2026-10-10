@@ -38,13 +38,6 @@ const BLUE_TINT_PRESETS = [
   { label: '80%', value: 0.8 },
 ];
 
-const BLUR_PRESETS = [
-  { label: 'Sharp (0)', value: 0 },
-  { label: 'Soft (3)', value: 3 },
-  { label: 'Medium (6)', value: 6 },
-  { label: 'Heavy (10)', value: 10 },
-];
-
 export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = ({
   backgroundImageUri,
   onSelectImageUri,
@@ -52,8 +45,6 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
   onChangeDarkness,
   blueTint,
   onChangeBlueTint,
-  blur,
-  onChangeBlur,
 }) => {
   const handlePickFromGallery = async () => {
     try {
@@ -88,9 +79,9 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
       {/* Pick / Remove Header */}
       <View style={styles.headerRow}>
         <View>
-          <Text style={styles.cardTitle}>Background Image / Wallpaper</Text>
+          <Text style={styles.cardTitle}>Background Wallpaper</Text>
           <Text style={styles.cardSubtitle}>
-            {hasImage ? 'Image active with effects' : 'Select a wallpaper or upload photo'}
+            {hasImage ? 'Custom wallpaper active' : 'Select a curated wallpaper or upload photo'}
           </Text>
         </View>
 
@@ -104,13 +95,13 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
       {/* Action Buttons */}
       <View style={styles.actionRow}>
         <TouchableOpacity onPress={handlePickFromGallery} style={styles.uploadBtn}>
-          <Text style={styles.uploadBtnText}>📸 Pick from Gallery</Text>
+          <Text style={styles.uploadBtnText}>📸 Choose Photo from Gallery</Text>
         </TouchableOpacity>
       </View>
 
       {/* Preset Wallpapers Carousel */}
-      <Text style={styles.sectionTitle}>Curated Wallpapers</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.presetScroll}>
+      <Text style={styles.sectionTitle}>Curated Textures & Wallpapers</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.presetScroll}>
         {PRESET_BACKGROUND_IMAGES.map((preset) => {
           const isSelected = backgroundImageUri === preset.uri;
           return (
@@ -124,7 +115,7 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
                 <View
                   style={[
                     styles.presetThumb,
-                    { backgroundColor: (preset as any).thumbColor || '#1E1B4B' },
+                    { backgroundColor: (preset as any).thumbColor || '#18181B' },
                   ]}
                 />
               ) : (
@@ -143,12 +134,12 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
       {/* Image Effects Section */}
       {hasImage && (
         <View style={styles.effectsSection}>
-          <Text style={styles.effectsHeading}>✨ Visual Effects & Overlays</Text>
+          <Text style={styles.effectsHeading}>Atmosphere & Overlays</Text>
 
           {/* Darkness Filter */}
           <View style={styles.effectGroup}>
             <View style={styles.effectHeader}>
-              <Text style={styles.effectTitle}>🌑 Darkness (Dimming)</Text>
+              <Text style={styles.effectTitle}>Darkness (Dimming)</Text>
               <Text style={styles.effectValue}>{Math.round(darkness * 100)}%</Text>
             </View>
             <View style={styles.chipRow}>
@@ -172,7 +163,7 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
           {/* Blue Tint Filter */}
           <View style={styles.effectGroup}>
             <View style={styles.effectHeader}>
-              <Text style={styles.effectTitle}>🌊 Blue Atmospheric Tint</Text>
+              <Text style={styles.effectTitle}>Blue Atmospheric Tint</Text>
               <Text style={styles.effectValue}>{Math.round(blueTint * 100)}%</Text>
             </View>
             <View style={styles.chipRow}>
@@ -197,30 +188,6 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
               })}
             </View>
           </View>
-
-          {/* Blur Filter */}
-          <View style={styles.effectGroup}>
-            <View style={styles.effectHeader}>
-              <Text style={styles.effectTitle}>🌫️ Background Blur</Text>
-              <Text style={styles.effectValue}>{blur}px</Text>
-            </View>
-            <View style={styles.chipRow}>
-              {BLUR_PRESETS.map((p) => {
-                const isActive = blur === p.value;
-                return (
-                  <TouchableOpacity
-                    key={p.label}
-                    onPress={() => onChangeBlur(p.value)}
-                    style={[styles.effectChip, isActive && styles.activeEffectChip]}
-                  >
-                    <Text style={[styles.effectChipText, isActive && styles.activeEffectChipText]}>
-                      {p.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
         </View>
       )}
     </View>
@@ -229,32 +196,40 @@ export const BackgroundImageControls: React.FC<BackgroundImageControlsProps> = (
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E293B',
-    padding: 14,
-    borderRadius: 14,
-    marginVertical: 8,
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    borderRadius: 18,
+    marginVertical: 6,
+    borderWidth: 1,
+    borderColor: '#F4F4F5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
+    elevation: 2,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   cardTitle: {
-    color: '#F8FAFC',
+    color: '#18181B',
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '600',
+    letterSpacing: -0.2,
   },
   cardSubtitle: {
-    color: '#94A3B8',
+    color: '#71717A',
     fontSize: 12,
     marginTop: 2,
   },
   clearBtn: {
-    backgroundColor: '#334155',
+    backgroundColor: '#FEE2E2',
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
   clearBtnText: {
     color: '#EF4444',
@@ -262,44 +237,44 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   actionRow: {
-    marginBottom: 12,
+    marginBottom: 14,
   },
   uploadBtn: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F4F4F5',
     borderWidth: 1.5,
-    borderColor: '#3B82F6',
+    borderColor: '#E4E4E7',
     borderStyle: 'dashed',
-    borderRadius: 10,
+    borderRadius: 14,
     paddingVertical: 12,
     alignItems: 'center',
   },
   uploadBtnText: {
-    color: '#60A5FA',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  sectionTitle: {
-    color: '#CBD5E1',
+    color: '#18181B',
     fontSize: 13,
     fontWeight: '600',
-    marginBottom: 8,
+  },
+  sectionTitle: {
+    color: '#18181B',
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 10,
   },
   presetScroll: {
     flexDirection: 'row',
+    gap: 10,
     marginBottom: 12,
   },
   presetThumbContainer: {
-    width: 88,
-    height: 72,
-    borderRadius: 10,
+    width: 90,
+    height: 76,
+    borderRadius: 14,
     overflow: 'hidden',
-    marginRight: 10,
     borderWidth: 2,
-    borderColor: '#334155',
+    borderColor: '#E4E4E7',
   },
   activePresetThumb: {
-    borderColor: '#3B82F6',
-    transform: [{ scale: 1.05 }],
+    borderColor: '#18181B',
+    transform: [{ scale: 1.04 }],
   },
   presetThumb: {
     width: '100%',
@@ -310,8 +285,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
-    paddingVertical: 2,
+    backgroundColor: 'rgba(24, 24, 27, 0.75)',
+    paddingVertical: 3,
     paddingHorizontal: 4,
   },
   presetNameText: {
@@ -321,33 +296,33 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   effectsSection: {
-    marginTop: 8,
-    paddingTop: 12,
+    marginTop: 10,
+    paddingTop: 14,
     borderTopWidth: 1,
-    borderTopColor: '#334155',
+    borderTopColor: '#F4F4F5',
   },
   effectsHeading: {
-    color: '#F8FAFC',
-    fontSize: 14,
-    fontWeight: '700',
+    color: '#18181B',
+    fontSize: 13,
+    fontWeight: '600',
     marginBottom: 10,
   },
   effectGroup: {
-    marginBottom: 12,
+    marginBottom: 14,
   },
   effectHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   effectTitle: {
-    color: '#94A3B8',
+    color: '#71717A',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   effectValue: {
-    color: '#60A5FA',
+    color: '#18181B',
     fontSize: 12,
     fontWeight: '700',
     fontFamily: 'monospace',
@@ -355,31 +330,31 @@ const styles = StyleSheet.create({
   chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
+    gap: 8,
   },
   effectChip: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F4F4F5',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#E4E4E7',
   },
   activeEffectChip: {
-    backgroundColor: '#475569',
-    borderColor: '#94A3B8',
+    backgroundColor: '#18181B',
+    borderColor: '#18181B',
   },
   activeBlueChip: {
-    backgroundColor: '#1E3A8A',
-    borderColor: '#3B82F6',
+    backgroundColor: '#2563EB',
+    borderColor: '#2563EB',
   },
   effectChipText: {
-    color: '#94A3B8',
+    color: '#52525B',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   activeEffectChipText: {
     color: '#FFFFFF',
-    fontWeight: '700',
+    fontWeight: '600',
   },
 });

@@ -24,7 +24,7 @@ interface FontControlsProps {
   onChangeAspectRatio: (ratio: AspectRatioType) => void;
 }
 
-const SIZE_PRESETS = [20, 28, 36, 44, 52];
+const SIZE_PRESETS = [20, 26, 32, 40, 48];
 const RATIOS: { label: string; value: AspectRatioType }[] = [
   { label: 'Square 1:1', value: '1:1' },
   { label: 'Story 4:5', value: '4:5' },
@@ -49,7 +49,7 @@ export const FontControls: React.FC<FontControlsProps> = ({
     <View style={styles.card}>
       {/* Aspect Ratio */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Image Shape / Ratio</Text>
+        <Text style={styles.sectionTitle}>Image Ratio</Text>
         <View style={styles.chipRow}>
           {RATIOS.map((item) => {
             const isSelected = aspectRatio === item.value;
@@ -70,8 +70,8 @@ export const FontControls: React.FC<FontControlsProps> = ({
 
       {/* Font Family */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Font Family</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollChips}>
+        <Text style={styles.sectionTitle}>Typography Family</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollChips}>
           {FONT_OPTIONS.map((f) => {
             const isSelected = fontFamily === f.value;
             return (
@@ -104,7 +104,7 @@ export const FontControls: React.FC<FontControlsProps> = ({
               onPress={() => onChangeFontSize(Math.max(14, fontSize - 2))}
               style={styles.stepperButton}
             >
-              <Text style={styles.stepperText}>-</Text>
+              <Text style={styles.stepperText}>−</Text>
             </TouchableOpacity>
             <Text style={styles.sizeIndicator}>{fontSize}px</Text>
             <TouchableOpacity
@@ -132,7 +132,7 @@ export const FontControls: React.FC<FontControlsProps> = ({
 
       {/* Font Weight & Style & Alignment */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Weight, Style & Align</Text>
+        <Text style={styles.sectionTitle}>Weight & Alignment</Text>
         <View style={styles.chipRow}>
           <TouchableOpacity
             onPress={() => onChangeFontWeight('normal')}
@@ -187,7 +187,7 @@ export const FontControls: React.FC<FontControlsProps> = ({
         </View>
 
         {/* Alignment */}
-        <View style={[styles.chipRow, { marginTop: 8 }]}>
+        <View style={[styles.chipRow, { marginTop: 10 }]}>
           {(['left', 'center', 'right'] as const).map((align) => (
             <TouchableOpacity
               key={align}
@@ -213,18 +213,26 @@ export const FontControls: React.FC<FontControlsProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E293B',
-    padding: 14,
-    borderRadius: 14,
-    marginVertical: 8,
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    borderRadius: 18,
+    marginVertical: 6,
+    borderWidth: 1,
+    borderColor: '#F4F4F5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
+    elevation: 2,
   },
   section: {
-    marginBottom: 14,
+    marginBottom: 16,
   },
   sectionTitle: {
-    color: '#F8FAFC',
-    fontSize: 14,
+    color: '#18181B',
+    fontSize: 13,
     fontWeight: '600',
+    letterSpacing: -0.2,
     marginBottom: 8,
   },
   rowBetween: {
@@ -240,58 +248,67 @@ const styles = StyleSheet.create({
   },
   scrollChips: {
     flexDirection: 'row',
+    gap: 8,
   },
   chip: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F4F4F5',
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 10,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#334155',
-    marginRight: 6,
-    marginBottom: 4,
+    borderColor: '#E4E4E7',
   },
   sizeChip: {
-    backgroundColor: '#0F172A',
-    paddingHorizontal: 12,
+    backgroundColor: '#F4F4F5',
+    paddingHorizontal: 14,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#E4E4E7',
   },
   activeChip: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#60A5FA',
+    backgroundColor: '#18181B',
+    borderColor: '#18181B',
   },
   chipText: {
-    color: '#CBD5E1',
+    color: '#52525B',
     fontSize: 13,
+    fontWeight: '500',
   },
   activeChipText: {
     color: '#FFFFFF',
-    fontWeight: '700',
+    fontWeight: '600',
   },
   stepperRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#F4F4F5',
+    borderRadius: 20,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
   },
   stepperButton: {
-    backgroundColor: '#334155',
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   stepperText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: '#18181B',
+    fontSize: 16,
     fontWeight: 'bold',
   },
   sizeIndicator: {
-    color: '#60A5FA',
-    fontSize: 14,
-    fontWeight: 'bold',
+    color: '#18181B',
+    fontSize: 13,
+    fontWeight: '700',
     marginHorizontal: 10,
     fontFamily: 'monospace',
   },
