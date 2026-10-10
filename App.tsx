@@ -71,6 +71,8 @@ function StudioContent() {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [generatedUri, setGeneratedUri] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [inputHeight, setInputHeight] = useState<number>(100);
 
   const canvasRef = useRef<any>(null);
 
@@ -183,6 +185,15 @@ function StudioContent() {
             <View style={styles.inputHeaderRow}>
               <Text style={styles.cardTitle}>Your Text</Text>
               <View style={styles.inputHeaderActions}>
+                <TouchableOpacity
+                  onPress={() => setIsExpanded(!isExpanded)}
+                  style={styles.expandBtn}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.expandBtnText}>
+                    {isExpanded ? '⤡ Compact' : '⤢ Expand'}
+                  </Text>
+                </TouchableOpacity>
                 {Boolean(config.text) && (
                   <TouchableOpacity
                     onPress={() => updateConfig('text', '')}
@@ -202,16 +213,36 @@ function StudioContent() {
               </View>
             </View>
             <TextInput
-              style={styles.textInput}
+              style={[
+                styles.textInput,
+                isExpanded
+                  ? styles.textInputExpanded
+                  : { height: Math.max(100, Math.min(inputHeight, 260)) },
+              ]}
               value={config.text}
               onChangeText={(text) => updateConfig('text', text)}
+              onContentSizeChange={(e) => {
+                setInputHeight(e.nativeEvent.contentSize.height + 24);
+              }}
               placeholder="Enter your thoughts or quote..."
               placeholderTextColor="#A1A1AA"
               multiline
-              numberOfLines={4}
+              numberOfLines={isExpanded ? 10 : 4}
+              scrollEnabled={true}
               maxLength={1000}
             />
-            <Text style={styles.charCount}>{config.text.length} / 1000</Text>
+            <View style={styles.textInputFooter}>
+              <TouchableOpacity
+                onPress={() => setIsExpanded(!isExpanded)}
+                style={styles.expandTogglePrompt}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.expandTogglePromptText}>
+                  {isExpanded ? '▲ Collapse text area' : '▼ Expand text area'}
+                </Text>
+              </TouchableOpacity>
+              <Text style={styles.charCount}>{config.text.length} / 1000</Text>
+            </View>
 
             {/* Author / Signature Section */}
             <View style={styles.authorSection}>
@@ -503,6 +534,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  expandBtn: {
+    backgroundColor: '#F4F4F5',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#E4E4E7',
+  },
+  expandBtnText: {
+    color: '#3F3F46',
+    fontSize: 11,
+    fontWeight: '600',
+  },
   clearTextBtn: {
     backgroundColor: 'rgba(239, 68, 68, 0.08)',
     paddingHorizontal: 10,
@@ -536,16 +580,31 @@ const styles = StyleSheet.create({
     color: '#18181B',
     fontSize: 14,
     minHeight: 100,
-    maxHeight: 180,
     textAlignVertical: 'top',
     borderWidth: 1,
     borderColor: '#E4E4E7',
   },
+  textInputExpanded: {
+    minHeight: 240,
+    maxHeight: 400,
+  },
+  textInputFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 6,
+  },
+  expandTogglePrompt: {
+    paddingVertical: 2,
+  },
+  expandTogglePromptText: {
+    color: '#71717A',
+    fontSize: 11,
+    fontWeight: '500',
+  },
   charCount: {
     color: '#A1A1AA',
     fontSize: 11,
-    textAlign: 'right',
-    marginTop: 6,
   },
   authorSection: {
     marginTop: 14,
